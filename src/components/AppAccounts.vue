@@ -306,7 +306,8 @@ export default {
 
     // Handle edit button
     editAccount(account) {
-      this.editAccountForm = account;
+      this.editAccountForm.id = account.id;
+      this.editAccountForm.name = account.name;
     },
 
     // Handle Delete button
