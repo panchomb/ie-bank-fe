@@ -155,6 +155,21 @@
             >
             </b-form-input>
           </b-form-group>
+
+          <b-form-group
+            id="form-edit-country-group"
+            label="Account Country:"
+            label-for="form-edit-country-input"
+          >
+            <b-form-input
+              id="form-edit-country-input"
+              type="text"
+              v-model="editAccountForm.country"
+              placeholder="Account Country"
+              required
+            >
+            </b-form-input>
+          </b-form-group>
           <b-button type="submit" variant="outline-info">Update</b-button>
         </b-form>
       </b-modal>
@@ -178,6 +193,7 @@ export default {
       editAccountForm: {
         id: "",
         name: "",
+        country: "",
       },
       showMessage: false,
       message: "",
@@ -299,6 +315,7 @@ export default {
       this.$refs.editAccountModal.hide(); //hide the modal when submitted
       const payload = {
         name: this.editAccountForm.name,
+        country: this.editAccountForm.country,
       };
       this.RESTupdateAccount(payload, this.editAccountForm.id);
       this.initForm();
@@ -308,6 +325,7 @@ export default {
     editAccount(account) {
       this.editAccountForm.id = account.id;
       this.editAccountForm.name = account.name;
+      this.editAccountForm.country = account.country;
     },
 
     // Handle Delete button
