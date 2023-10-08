@@ -7,10 +7,12 @@ on:
   push:
     branches:
       - main
+      - '*'
   workflow_dispatch:
 
 env:
-  FRONTEND_WEBAPP_DEV: panchomb-fe-dev
+  FRONTEND_WEBAPP_NAME: panchomb-fe-
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'uat' || 'dev' }}
 
 jobs:
   build:
@@ -27,14 +29,19 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          npm install
-          npm run build -- --mode development --dest dist-dev ## this command will build the vue.js app using .env.development variables into the dest-div/ folder
+          if [[ $ENVIRONMENT == "uat" ]]; then
+            npm install
+            npm run build -- --mode production --dest dist-prod
+          else
+            npm install
+            npm run build -- --mode development --dest dist-custom
+          fi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app-dev
-          path: dist-dev/
+          name: node-app-${{ env.ENVIRONMENT }}
+          path: dist-${{ env.ENVIRONMENT }}/
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +54,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app-dev
+          name: node-app-${{ env.ENVIRONMENT }}
 
       - uses: azure/login@v1
         with:
@@ -57,5 +64,5 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
+          app-name: ${{ env.FRONTEND_WEBAPP_NAME }}${{ env.ENVIRONMENT }}
           package: .
