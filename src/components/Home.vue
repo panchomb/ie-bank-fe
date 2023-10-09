@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-12 text-center">
           <h1>Welcome to IE Bank</h1>
-          <p>This is the home page of IE Bank Platform.</p>
+          <p>This is the home page of IE Bank Platform. (development)</p>
           <button @click="redirectToAccounts" class="btn btn-success btn-lg">
             Go to Accounts
           </button>
