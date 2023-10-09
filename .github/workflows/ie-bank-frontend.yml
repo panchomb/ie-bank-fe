@@ -31,10 +31,10 @@ jobs:
         run: |
           if [[ $ENVIRONMENT == "uat" ]]; then
             npm install
-            npm run build -- --mode production --dest dist
+            npm run build -- --mode production --dest dist-dev
           else
             npm install
-            npm run build -- --mode development --dest dist
+            npm run build -- --mode development --dest dist-dev
           fi
 
       - name: Upload artifact for deployment job
