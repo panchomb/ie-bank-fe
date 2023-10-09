@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  FRONTEND_WEBAPP_NAME: panchomb-fe-
+  FRONTEND_WEBAPP_NAME: panchomb-fe
   ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'uat' || 'dev' }}
 
 jobs:
@@ -40,8 +40,8 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app-${{ env.ENVIRONMENT }}
-          path: dist-${{ env.ENVIRONMENT }}/
+          name: node-app-dev
+          path: dist-dev/
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app-${{ env.ENVIRONMENT }}
+          name: node-app-dev
 
       - uses: azure/login@v1
         with:
@@ -64,5 +64,5 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.FRONTEND_WEBAPP_NAME }}${{ env.ENVIRONMENT }}
+          app-name: ${{ env.FRONTEND_WEBAPP_NAME }}'-'${{ env.ENVIRONMENT }}
           package: .
